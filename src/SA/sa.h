@@ -11,14 +11,8 @@
 
 namespace suffixarray {
 
-  // Used to represent alphabet symbols encoded
-  // to values {0, .., k-1} where k is the number
-  // of different symbols in the alphabet.
-  // 0 is reserved for termination character.
-  typedef Symbol unsigned int16;
-
   // Represents indices.
-  typedef Index int;
+  typedef int Index;
 
 }  // namespace suffixarray
 
