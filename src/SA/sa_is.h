@@ -15,7 +15,8 @@ namespace suffixarray {
 
 //  Creates suffix array for sequence seq in sa. Both arrays must be
 //  at least of length n, and symbols in seq must be from {0, .., k-1}, with
-//  0 being reserved for sequence terminator character.
+//  0 being reserved for sequence terminator character. Ordering is determined
+//  by numerical values in seq.
 //  Returns -1 in case of errors.
 int sa_is(const char seq[], Index sa[], Index n, char k);
 

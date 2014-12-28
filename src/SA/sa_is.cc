@@ -14,7 +14,6 @@
 // Namespace for local methods.
 namespace {
 
-
 using suffixarray::Index;
 
 enum SymbolType { L = 1, S = 2 };
