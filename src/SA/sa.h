@@ -7,10 +7,12 @@
 #ifndef BIOINF2015_SA_SA_H_
 #define BIOINF2015_SA_SA_H_
 
+#include "types.h"
+
 namespace suffixarray {
 
   // Represents indices.
-  typedef int Index;
+  typedef Index Index;
 
 }  // namespace suffixarray
 
