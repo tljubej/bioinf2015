@@ -1,9 +1,7 @@
-// Copyright 2014. Authors
+// Copyright 2014. Authors, see LICENSE file
 //
 // Contains general type definitions and useful utility methods for working
 // with suffix arrays.
-//
-// Author: Fran Jurisic (fran.jurisic@fer.hr)
 //
 
 #ifndef BIOINF2015_SA_SA_H_

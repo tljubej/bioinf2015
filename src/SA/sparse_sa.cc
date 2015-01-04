@@ -1,12 +1,10 @@
-//  Copyright 2014. Authors
+//  Copyright 2014. Authors, see LICENSE file
 //
 //  This file contains definitions of utilty methods related to
 //  sparse suffix arrays.
 //
-//  Author: Fran Jurisic (fran.jurisic@fer.hr)
-//
 
-#include "sparse_sa.h"
+#include "SA/sparse_sa.h"
 
 #include <cstdlib>
 

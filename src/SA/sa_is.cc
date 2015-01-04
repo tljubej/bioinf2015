@@ -1,12 +1,10 @@
-//  Copyright 2014. Authors
+//  Copyright 2014. Authors, see LICENSE file
 //
 //  This file contains implementations of Suffix Array - Induced Sorting
 //  (SA-IS) methods.
 //
-//  Author: Fran Jurisic (fran.jurisic@fer.hr)
-//
 
-#include "sa_is.h"
+#include "SA/sa_is.h"
 
 #include <vector>
 #include <algorithm>

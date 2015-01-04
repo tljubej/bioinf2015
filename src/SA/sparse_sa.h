@@ -1,15 +1,13 @@
-//  Copyright 2014. Authors
+//  Copyright 2014. Authors, see LICENSE file
 //
 //  This file contains declarations of utilty methods related to
 //  sparse suffix arrays.
-//
-//  Author: Fran Jurisic (fran.jurisic@fer.hr)
 //
 
 #ifndef BIOINF2015_SA_SPARSE_SA_H_
 #define BIOINF2015_SA_SPARSE_SA_H_
 
-#include "sa.h"
+#include "SA/sa.h"
 
 namespace suffixarray {
 

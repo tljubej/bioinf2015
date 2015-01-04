@@ -1,15 +1,13 @@
-//  Copyright 2014. Authors
+//  Copyright 2014. Authors, see LICENSE file
 //
 //  This file contains definitions of Suffix Array - Induced Sorting
 //  (SA-IS) methods.
-//
-//  Author: Fran Jurisic (fran.jurisic@fer.hr)
 //
 
 #ifndef BIOINF2015_SA_SA_IS_H_
 #define BIOINF2015_SA_SA_IS_H_
 
-#include "sa.h"
+#include "SA/sa.h"
 
 namespace suffixarray {
 
