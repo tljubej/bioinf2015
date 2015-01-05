@@ -4,7 +4,7 @@
 //  (SA-IS) methods.
 //
 
-#include "SA/sa_is.h"
+#include "sa/sa_is.h"
 
 #include <vector>
 #include <algorithm>

@@ -7,7 +7,7 @@
 #ifndef BIOINF2015_SA_SA_IS_H_
 #define BIOINF2015_SA_SA_IS_H_
 
-#include "SA/sa.h"
+#include "sa/sa.h"
 
 namespace suffixarray {
 

@@ -4,7 +4,7 @@
 //  sparse suffix arrays.
 //
 
-#include "SA/sparse_sa.h"
+#include "sa/sparse_sa.h"
 
 #include <cstdlib>
 

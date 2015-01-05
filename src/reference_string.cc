@@ -7,8 +7,8 @@
 
 #include <memory>
 
-#include "SA/sa_is.h"
-#include "SA/sparse_sa.h"
+#include "sa/sa_is.h"
+#include "sa/sparse_sa.h"
 
 ReferenceString::ReferenceString(const char seq[], Index n, Index k)
   : s_(seq), n_(n), k_(k) {
