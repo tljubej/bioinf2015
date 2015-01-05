@@ -29,7 +29,7 @@ struct MatchInterval {
 // Finds next match interval for match length of prev.matched+1 for
 // reference string ref and query string query starting at query_pos.
 // Next character which will attempt to be matched is:
-//  query[query_pos + prev.matched + 1]
+//  query[query_pos + prev.matched]
 // If no such interval exist then return value of matched will be -1.
 MatchInterval match_next_char(const ReferenceString& ref,
     const std::string& query, Index query_pos, const MatchInterval& prev);
