@@ -5,14 +5,15 @@
 
 #include "reference_string.h"
 
+#include <cstring>
 #include <memory>
 
 #include "sa/sa_is.h"
 #include "sa/sparse_sa.h"
 
-ReferenceString::ReferenceString(const char seq[], Index n, Index k)
-  : s_(seq), n_(n), k_(k) {
-  std::unique_ptr<Index[]> sa(new Index[n]);
+ReferenceString::ReferenceString(const char seq[], Index k)
+  : s_(seq), n_(strlen(seq)+1), k_(k) {
+  std::unique_ptr<Index[]> sa(new Index[n_]);
   // 127 is maximal positive value for char
   suffixarray::sa_is(s_, sa.get(), n_, 127);
   if (k == 1) {
@@ -29,7 +30,7 @@ ReferenceString::ReferenceString(const char seq[], Index n, Index k)
 
 // Returns length of the reference string.
 Index ReferenceString::slen() const {
-  return n_;
+  return n_ - 1;
 }
 
 // Returns sparse suffix array factor k.

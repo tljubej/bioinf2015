@@ -18,9 +18,9 @@
 class ReferenceString {
  public:
   // Creates a reference string object from the corresponding
-  // string of length n and sparse suffix array factor k.
+  // c style string and sparse suffix array factor k.
   // Does not take ownership or make a copy of the string.
-  ReferenceString(const char seq[], Index n, Index k);
+  ReferenceString(const char seq[], Index k);
 
   // Returns length of the reference string.
   Index slen() const;
