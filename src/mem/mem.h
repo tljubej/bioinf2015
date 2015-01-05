@@ -18,6 +18,10 @@ namespace mem {
 // of match beginnings in the reference and query string and
 // the match length.
 struct MEM {
+  MEM(Index r, Index q, Index l)
+    : reference_string_idx(r),
+      query_string_idx(q),
+      length(l) {}
   Index reference_string_idx;
   Index query_string_idx;
   Index length;
@@ -30,7 +34,7 @@ class MEMFinder {
   // minimal length l and stores them in vector mems.
   // Matches in resulting vector are unique.
   // Returns -1 in case of errors.
-  virtual int FindMEMs(const ReferenceString& ref, const std::string& query,
+  virtual int find_mems(const ReferenceString& ref, const std::string& query,
       Index l, std::vector<MEM>* mems) = 0;
 };
 
