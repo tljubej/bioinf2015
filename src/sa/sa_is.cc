@@ -9,10 +9,9 @@
 #include <vector>
 #include <algorithm>
 
+namespace suffixarray {
 // Namespace for local methods.
 namespace {
-
-using suffixarray::Index;
 
 enum SymbolType { L = 1, S = 2 };
 
@@ -227,8 +226,6 @@ int sa_is_internal(const Symbol seq[], Index sa[], Index n, Symbol k) {
 }
 
 }  // namespace
-
-namespace suffixarray {
 
 int sa_is(const char seq[], Index sa[], Index n, char k) {
   return sa_is_internal<char>(seq, sa, n, k);
