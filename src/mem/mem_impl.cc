@@ -1,4 +1,4 @@
-// Copyright 2014. Authors, see LICENSE file
+// Copyright 2015. Authors, see LICENSE file
 //
 // Definition of MEMFinder implementation based upon
 // bioinformatics.oxfordjournals.org/content/25/13/1609.long

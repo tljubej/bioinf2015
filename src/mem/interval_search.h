@@ -18,7 +18,6 @@ namespace mem {
 // where current query string fragment matches at least matched
 // characters. Suffix array interval bounds from and to are both
 // inclusive.
-// If from > to then there is no interval of match length matched.
 struct MatchInterval {
   MatchInterval(Index m, Index f, Index t)
     : matcher(m), from(f), to(t) {}
@@ -31,6 +30,7 @@ struct MatchInterval {
 // reference string ref and query string query starting at query_pos.
 // Next character which will attempt to be matched is:
 //  query[query_pos + prev.matched + 1]
+// If no such interval exist then return value of matched will be -1.
 MatchInterval match_next_char(const ReferenceString& ref,
     const std::string& query, Index query_pos, const MatchInterval& prev);
 

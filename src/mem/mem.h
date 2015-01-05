@@ -1,4 +1,4 @@
-// Copyright 2014. Authors, see LICENSE file
+// Copyright 2015. Authors, see LICENSE file
 //
 // Declaration of general Maximal Exact Match tools.
 //
