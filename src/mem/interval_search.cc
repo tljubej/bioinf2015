@@ -9,6 +9,8 @@ namespace {
 
 enum Side { LEFT, RIGHT };
 
+// Locates left or right end (depending on s being LEFT or RIGHT) of matched
+// interval.
 Index bsearch(char c, const ReferenceString& ref, const MatchInterval& p,
               Side s) {
   Index l = p.from;
@@ -41,7 +43,7 @@ Index bsearch(char c, const ReferenceString& ref, const MatchInterval& p,
     return l;
   }
 }
-}
+} // namespace
 
 namespace mem {
 
