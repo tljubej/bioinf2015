@@ -30,8 +30,8 @@ class MEMFinder {
   // minimal length l and stores them in vector mems.
   // Matches in resulting vector are unique.
   // Returns -1 in case of errors.
-  virtual int FindMEMs(ReferenceString ref, std::string query, Index l,
-      std::vector<MEM>* mems) = 0;
+  virtual int FindMEMs(const ReferenceString& ref, const std::string& query,
+      Index l, std::vector<MEM>* mems) = 0;
 };
 
 }  // namespace mem

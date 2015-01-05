@@ -18,8 +18,8 @@ namespace mem {
 // alghorithm.
 class MEMFinderImpl : public MEMFinder {
  public:
-  int FindMEMs(ReferenceString ref, std::string query, Index l,
-      std::vector<MEM>* mems) override;
+  int FindMEMs(const ReferenceString& ref, const std::string&  query,
+      Index l, std::vector<MEM>* mems) override;
 };
 
 }  // namespace mem

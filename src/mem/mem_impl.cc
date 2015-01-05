@@ -29,7 +29,8 @@ struct MEMComparator {
 
 namespace mem {
 
-int MEMFinderImpl::FindMEMs(ReferenceString ref, std::string query,
+int MEMFinderImpl::FindMEMs(
+    const ReferenceString& ref, const std::string& query,
     Index l, std::vector<MEM>* mems) {
   // TODO(Fran): Implementation ofc
   return 0;
