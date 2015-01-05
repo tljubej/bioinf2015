@@ -1,8 +1,15 @@
+// Copyright 2015. Authors, see LICENSE file
+//
+// Tool definitions for locating match intervals in
+// suffix arrays with binary search.
+
 #include "interval_search.h"
+
+namespace {
 
 enum Side { LEFT, RIGHT };
 
-Index bsearch(char c, const ReferenceString &ref, const MatchInterval &p,
+Index bsearch(char c, const ReferenceString& ref, const MatchInterval& p,
               Side s) {
   Index l = p.from;
   Index r = p.to;
@@ -34,17 +41,19 @@ Index bsearch(char c, const ReferenceString &ref, const MatchInterval &p,
     return l;
   }
 }
+}
 
 namespace mem {
 
-MatchInterval match_next_char(const ReferenceString &ref,
-                              const std::string &query, Index query_pos,
-                              const MatchInterval &prev) {
+MatchInterval match_next_char(const ReferenceString& ref,
+                              const std::string& query, Index query_pos,
+                              const MatchInterval& prev) {
   MatchInterval newm(-1, 0, 0);
 
-  char c = query[query_pos];
+  char c = query[query_pos + prev.matched];
 
-  if (c != ref.s(ref.sa() + prev.matched)) {
+  if (c < ref.s(ref.sa(prev.from) + prev.matched) ||
+      c > ref.s(ref.sa(prev.to) + prev.matched)) {
     return newm;
   }
 
@@ -61,4 +70,4 @@ MatchInterval match_next_char(const ReferenceString &ref,
   return newm;
 }
 
-} // namespace mem
+}  // namespace mem
