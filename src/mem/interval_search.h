@@ -20,7 +20,7 @@ namespace mem {
 // inclusive.
 struct MatchInterval {
   MatchInterval(Index m, Index f, Index t)
-    : matcher(m), from(f), to(t) {}
+    : matched(m), from(f), to(t) {}
   Index matched;
   Index from;
   Index to;
