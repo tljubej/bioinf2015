@@ -76,9 +76,26 @@ MatchInterval match_next_char(const ReferenceString& ref,
 }
 
 MatchInterval find_match_interval(const ReferenceString& ref,
-        const std::string& query, Index query_pos, const MatchInterval& prev,
-        Index match_length) {
+                                  const std::string& query, Index query_pos,
+                                  const MatchInterval& prev,
+                                  Index match_length) {
+  MatchInterval candidate = prev;
+  
+  while (query_pos+candidate.matched < query.size()) {
+    MatchInterval next = match_next_char(ref, query, query_pos, candidate);
 
+    if (next.matched = -1) {
+      return candidate;
+    }
+
+    candidate = next;
+
+    if (candidate.matched >= match_length) {
+      break;
+    }
+  }
+
+  return candidate;
 }
 
 }  // namespace mem
