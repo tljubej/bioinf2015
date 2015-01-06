@@ -30,7 +30,7 @@ Index log2i(Index x) {
 MatchInterval expand_link(const ReferenceString& ref,
                           const MatchInterval& interval) {
   Index q = interval.matched;
-  Index n = ref.slen();
+  Index n = ref.salen();
   if (q == 0) {
     return MatchInterval(0, 0, n - 1);
   }
