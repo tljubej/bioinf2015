@@ -34,7 +34,7 @@ Index bsearch(char c, const ReferenceString& ref, const MatchInterval& p,
 
   while (r - l > 1) {
     Index m = (l + r) / 2;
-    if (c < ref.s(ref.sa(m) + p) + lessequal) {
+    if (c < ref.s(ref.sa(m) + p.matched) + lessequal) {
       r = m;
     } else {
       l = m;
@@ -80,7 +80,7 @@ MatchInterval find_match_interval(const ReferenceString& ref,
                                   const MatchInterval& prev,
                                   Index match_length) {
   MatchInterval candidate = prev;
-  
+
   while (query_pos+candidate.matched < query.size()) {
     MatchInterval next = match_next_char(ref, query, query_pos, candidate);
 
