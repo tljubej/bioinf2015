@@ -30,7 +30,7 @@ Index log2i(Index x) {
 MatchInterval expand_link(const ReferenceString& ref,
                           const MatchInterval& interval) {
   Index q = interval.matched;
-  Index n = ref.size();
+  Index n = ref.slen();
   if (q == 0) {
     return MatchInterval(0, 0, n - 1);
   }
@@ -67,9 +67,12 @@ MatchInterval find_suffix_link(const ReferenceString& ref,
   }
   Index l = interval.from;
   Index r = interval.to;
+  Index newl = ref.isa(ref.sa(l)/ref.k() + 1);
+  Index newr = ref.isa(ref.sa(r)/ref.k() + 1);
 
-  MatchInterval link(q, ref.isa(ref.sa(l)/ref.k() + 1),
-                        ref.isa(ref.sa(r)/ref.k()) + 1);
+  assert(newl < ref.salen() && newr < ref.salen());
+
+  MatchInterval link(q, newl, newr);
 
   return expand_link(ref, link);
 
