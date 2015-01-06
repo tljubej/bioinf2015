@@ -4,6 +4,10 @@
 // suffix arrays with binary search.
 
 #include "interval_search.h"
+#include "types.h"
+
+
+namespace mem {
 
 namespace {
 
@@ -16,7 +20,7 @@ Index bsearch(char c, const ReferenceString& ref, const MatchInterval& p,
   Index l = p.from;
   Index r = p.to;
   Index t;
-  short lessequal = 0;
+  Index lessequal = 0;
   if (s == LEFT) {
     t = l;
     lessequal = 1;
@@ -43,9 +47,8 @@ Index bsearch(char c, const ReferenceString& ref, const MatchInterval& p,
     return l;
   }
 }
-} // namespace
+}  // namespace
 
-namespace mem {
 
 MatchInterval match_next_char(const ReferenceString& ref,
                               const std::string& query, Index query_pos,
@@ -70,6 +73,12 @@ MatchInterval match_next_char(const ReferenceString& ref,
   }
 
   return newm;
+}
+
+MatchInterval find_match_interval(const ReferenceString& ref,
+        const std::string& query, Index query_pos, const MatchInterval& prev,
+        Index match_length) {
+
 }
 
 }  // namespace mem
