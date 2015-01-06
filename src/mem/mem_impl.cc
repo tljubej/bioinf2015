@@ -102,7 +102,10 @@ int find_mems_internal(
   Index query_pos = query_p0;
 
   while (query_pos < query.size() - (ref.k() - query_p0)) {
-    // TODO(Fran): Get min_match and max_match.
+    min_match = find_match_interval(ref, query, query_pos, min_match,
+        l - (ref.k() - 1));
+    max_match = find_match_interval(ref, query, query_pos, max_match,
+        query.size());
     if (min_match.matched <= 1) {
       min_match = MatchInterval(0, 0, ref.salen());
       max_match = MatchInterval(0, 0, ref.salen());
@@ -110,7 +113,7 @@ int find_mems_internal(
       continue;
     }
     if (min_match.matched > l - (ref.k() - 1)) {
-      // TODO(Fran): Collect mems to set.
+      collect_mems(ref, query, l, query_pos, min_match, max_match, mems);
     }
     query_pos += ref.k();
     // TODO(Fran): Use suffixlink magic to reset match intervals.

@@ -34,6 +34,13 @@ struct MatchInterval {
 MatchInterval match_next_char(const ReferenceString& ref,
     const std::string& query, Index query_pos, const MatchInterval& prev);
 
+// Find match interval in SA of reference string ref for query string query
+// starting at query_pos. Previous and encompassing match interval is prev,
+// and resulting interval should have up to match_length matched characters.
+MatchInterval find_match_interval(const ReferenceString& ref,
+    const std::string& query, Index query_pos, const MatchInterval& prev,
+    Index match_length);
+
 }  // namespace mem
 
 
