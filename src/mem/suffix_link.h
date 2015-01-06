@@ -2,10 +2,11 @@
 //
 // Declaration of functions for suffix link simulation
 
-#ifndef BIOINF2015_SUFFIX_LINK_H_
-#define BIOINF2015_SUFFIX_LINK_H_
+#ifndef BIOINF2015_MEM_SUFFIX_LINK_H_
+#define BIOINF2015_MEM_SUFFIX_LINK_H_
 
-#include "interval_search.h"
+#include "mem/interval_search.h"
+#include "reference_string.h"
 
 namespace mem {
 
@@ -15,4 +16,4 @@ MatchInterval find_suffix_link(const ReferenceString& ref,
 
 }  // namespace mem
 
-#endif  // BIOINF2015_SUFFIX_LINK_H_
+#endif  // BIOINF2015_MEM_SUFFIX_LINK_H_
