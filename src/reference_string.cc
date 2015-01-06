@@ -5,32 +5,49 @@
 
 #include "reference_string.h"
 
-#include <cstring>
+#include <string>
 #include <memory>
 
+#include <cstdio>
 #include "sa/sa_is.h"
 #include "sa/sparse_sa.h"
 
-ReferenceString::ReferenceString(const char seq[], Index k)
-  : s_(seq), n_(strlen(seq)+1), k_(k) {
+ReferenceString::ReferenceString(std::string* seq, Index k)
+  : s_(seq), k_(k) {
+  n_ = seq->size() + 1;
   std::unique_ptr<Index[]> sa(new Index[n_]);
   // 127 is maximal positive value for char
-  suffixarray::sa_is(s_, sa.get(), n_, 127);
+  suffixarray::sa_is(s_->c_str(), sa.get(), n_, 127);
+  for (int i = 0; i < n_; i++) {
+    printf("%d\n", sa[i]);
+  }
   if (k == 1) {
     sa_.swap(sa);
   } else {
-    sa_.reset(new Index[salen()]);
-    suffixarray::sa2ssa(sa.get(), sa_.get(), n_, k_);
+    // Add padding to the string so length (including the terminating
+    // character) is a multiple of k (+1), and the final character is the
+    // terminating character. Original length is stored for convenience.
+    if (seq->size() % k != 0) {
+      Index n_cop = n_;
+      n_ += k - seq->size() % k;
+      seq->append(k - seq->size() % k, '\0');
+      sa_.reset(new Index[salen()]);
+      suffixarray::sa2ssa(sa.get(), sa_.get() + 1, n_cop, k_);
+      sa_[0] = n_ - 1;
+    } else {
+      sa_.reset(new Index[salen()]);
+      suffixarray::sa2ssa(sa.get(), sa_.get(), n_, k_);
+    }
   }
   isa_.reset(new Index[salen()]);
   suffixarray::ssa2isa(sa_.get(), isa_.get(), salen(), k_);
   lcp_.reset(new Index[salen()]);
-  suffixarray::ssa2lcp(s_, sa_.get(), isa_.get(), lcp_.get(), n_, k_);
+  suffixarray::ssa2lcp(s_->c_str(), sa_.get(), isa_.get(), lcp_.get(), n_, k_);
 }
 
 // Returns length of the reference string.
 Index ReferenceString::slen() const {
-  return n_ - 1;
+  return n_;
 }
 
 // Returns sparse suffix array factor k.
@@ -40,7 +57,7 @@ Index ReferenceString::k() const {
 
 // Returns character of reference string at index n.
 char ReferenceString::s(Index n) const {
-  return s_[n];
+  return (*s_)[n];
 }
 
 // Returns length of sa, isa and lcp.

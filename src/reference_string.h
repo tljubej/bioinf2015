@@ -7,6 +7,7 @@
 #define BIOINF2015_REFERENCE_STRING_H_
 
 #include <memory>
+#include <string>
 
 #include "types.h"
 
@@ -18,9 +19,10 @@
 class ReferenceString {
  public:
   // Creates a reference string object from the corresponding
-  // c style string and sparse suffix array factor k.
+  // string (pointer value, so it can be padded) and sparse
+  // suffix array factor k.
   // Does not take ownership or make a copy of the string.
-  ReferenceString(const char seq[], Index k);
+  ReferenceString(std::string* seq, Index k);
 
   // Returns length of the reference string.
   Index slen() const;
@@ -44,7 +46,7 @@ class ReferenceString {
   Index lcp(Index n) const;
 
  private:
-  const char* s_;
+  std::string* s_;
   std::unique_ptr<Index[]> sa_;
   std::unique_ptr<Index[]> isa_;
   std::unique_ptr<Index[]> lcp_;
