@@ -8,7 +8,6 @@
 #include <string>
 #include <memory>
 
-#include <cstdio>
 #include "sa/sa_is.h"
 #include "sa/sparse_sa.h"
 
@@ -18,9 +17,6 @@ ReferenceString::ReferenceString(std::string* seq, Index k)
   std::unique_ptr<Index[]> sa(new Index[n_]);
   // 127 is maximal positive value for char
   suffixarray::sa_is(s_->c_str(), sa.get(), n_, 127);
-  for (int i = 0; i < n_; i++) {
-    printf("%d\n", sa[i]);
-  }
   if (k == 1) {
     sa_.swap(sa);
   } else {
