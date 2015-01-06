@@ -6,6 +6,7 @@
 
 #include "mem/mem_impl.h"
 
+#include <algorithm>
 #include <string>
 #include <set>
 #include <vector>
@@ -31,6 +32,62 @@ struct MEMComparator {
     }
   }
 };
+
+// Takes an existing MEM in reference string and query string and returns
+// a MEM maximally extended to the left of the current match.
+// Extension goes only up to k-1 characters since the remainder of algorithm
+// guarantees that if extensions is possible to the k-th character, then that
+// match was previosly found already.
+MEM mem_extend_left(const ReferenceString& ref, const std::string& query,
+    const MEM& mem) {
+  Index q = mem.query_string_idx;
+  Index r = mem.reference_string_idx;
+  for (Index i = 0; i < ref.k(); ++i) {
+    if ((r - i == 0 || q - i == 0) || (ref.s(r - i - 1) != query[q - i - 1])) {
+      return MEM(r - i, q - i, mem.length + i);
+    }
+  }
+}
+
+// Collects MEMs for query string position query_pos of length l or greater.
+// min_match and max_match are minimal and maximal match intervals in SA,
+// and found MEMs are added to set mems.
+void collect_mems(const ReferenceString& ref, const std::string& query,
+    Index l, Index query_pos, const MatchInterval& min_match,
+    const MatchInterval& max_match, std::set<MEM, MEMComparator>* mems) {
+  Index left = max_match.from;
+  Index right = max_match.to;
+  Index matched = max_match.matched;
+  for (Index i = left; i <= right; ++i) {
+    MEM mem = mem_extend_left(ref, query,
+        MEM(ref.sa(i), query_pos, matched));
+    if (mem.length >= l)
+      mems->insert(mem);
+  }
+
+  while (matched >= min_match.matched) {
+    if (right + 1 < ref.salen())
+      matched = std::max(ref.lcp(left), ref.lcp(right));
+    else
+      matched = ref.lcp(left);
+
+    if (matched >= min_match.matched) {
+      // lcp[0] is -1 by definition.
+      while (ref.lcp(left) >= matched) {
+        MEM mem = mem_extend_left(ref, query,
+            MEM(ref.sa(--left), query_pos, matched));
+        if (mem.length >= l)
+          mems->insert(mem);
+      }
+      while (right + 1 < ref.salen() && ref.lcp(right + 1) >= matched) {
+        MEM mem = mem_extend_left(ref, query,
+            MEM(ref.sa(++right), query_pos, matched));
+        if (mem.length >= l)
+          mems->insert(mem);
+      }
+    }
+  }
+}
 
 // Internal implementation of MEMFinderImpl::find_mems, taking an
 // additional argument query_p0 which indicates starting offset,
@@ -67,7 +124,6 @@ int find_mems_internal(
 
 }  // namespace
 
-
 int MEMFinderImpl::find_mems(
     const ReferenceString& ref, const std::string& query,
     Index l, std::vector<MEM>* mems) {
@@ -82,6 +138,5 @@ int MEMFinderImpl::find_mems(
   }
   return 0;
 }
-
 
 }  // namespace mem

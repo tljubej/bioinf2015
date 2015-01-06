@@ -42,7 +42,7 @@ int ssa2lcp(const char seq[], const Index ssa[], const Index isa[], Index lcp[],
       || n < 1 || k < 1) return -1;
 
   Index l = 0;
-  lcp[0] = 0;
+  lcp[0] = -1;
   for (Index i = 0; i < (n-1)/k; ++i) {
     Index curr_ssa = isa[i];
     // We know that isa[(n-1)/k] == 0.

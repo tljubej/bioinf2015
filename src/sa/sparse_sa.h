@@ -29,6 +29,7 @@ int ssa2isa(const Index ssa[], Index isa[], Index n, Index k);
 // Creates a LCP index based on character sequence of length n,
 // and its sparse suffix array and corresponding inverse suffix
 // array, with the sparse suffix array factor being k.
+// LCP[0] will be -1.
 // Returns -1 in case of errors.
 int ssa2lcp(const char seq[], const Index ssa[], const Index isa[], Index lcp[],
     Index n, Index k);
