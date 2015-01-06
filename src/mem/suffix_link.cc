@@ -2,11 +2,11 @@
 //
 // Definition of functions for suffix link simulation
 
-#include "suffix_link.h"
-#include "interval_search.h"
+#include "mem/suffix_link.h"
 
 #include <cassert>
 
+#include "mem/interval_search.h"
 
 namespace mem {
 
@@ -61,7 +61,7 @@ MatchInterval expand_link(const ReferenceString& ref,
 
 MatchInterval find_suffix_link(const ReferenceString& ref,
                                const MatchInterval& interval) {
-  Index q = interval.matched - ref.k()
+  Index q = interval.matched - ref.k();
   if (q <= 0) {
     return MatchInterval(-1, 0, 0);
   }
