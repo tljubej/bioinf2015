@@ -13,6 +13,7 @@
 
 #include "mem/interval_search.h"
 #include "mem/mem.h"
+#include "mem/suffix_link.h"
 #include "types.h"
 
 namespace mem {
@@ -47,6 +48,7 @@ MEM mem_extend_left(const ReferenceString& ref, const std::string& query,
       return MEM(r - i, q - i, mem.length + i);
     }
   }
+  return MEM(-1, 0, 0);
 }
 
 // Collects MEMs for query string position query_pos of length l or greater.
