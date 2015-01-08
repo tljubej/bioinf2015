@@ -116,7 +116,8 @@ int find_mems_internal(
       collect_mems(ref, query, l, query_pos, min_match, max_match, mems);
     }
     query_pos += ref.k();
-    // TODO(Fran): Use suffixlink magic to reset match intervals.
+    min_match = find_suffix_link(ref, min_match);
+    max_match = find_suffix_link(ref, max_match);
     if (min_match.matched < 1) {
       min_match = MatchInterval(0, 0, ref.salen());
       max_match = MatchInterval(0, 0, ref.salen());
