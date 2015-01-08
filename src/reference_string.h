@@ -24,6 +24,14 @@ class ReferenceString {
   // Does not take ownership or make a copy of the string.
   ReferenceString(std::string* seq, Index k);
 
+  // Creates a reference string object from the corresponding
+  // string (pointer value, so it can be padded), array
+  // containing the corresponding suffix array which length
+  // must be seq->size()+1 and sparse suffix array factor k.
+  // Does not take ownership or make a copy of the string.
+  // Takes ownership of the suffix array.
+  ReferenceString(std::string* seq, Index sa[], Index k);
+
   // Returns length of the reference string.
   Index slen() const;
 
