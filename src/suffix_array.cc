@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
     fprintf(stderr, "Missing filename with FASTA formatted data.");
     return -1;
   }
-  std::unique_ptr<std::string> refstr(read_fasta(argv[1]));
+  std::unique_ptr<std::string> refstr(input_util::read_fasta(argv[1]));
   if (refstr.get() == nullptr) {
     fprintf(stderr, "Failed to read FASTA file.");
     return -1;
