@@ -9,3 +9,11 @@ and the Suffix Array construction algorithm is SA-IS algorithm from ["Two Effici
 
 Project source code is in src/, license can be found in LICENSE.
 The source code adheres to [Google C++ Style Guide](http://google-styleguide.googlecode.com/svn/trunk/cppguide.html).
+
+To build:
+
+    cmake CMakeLists.txt
+    make
+
+The binary file should be in bin/.
+A C++11 compliant compiler is required.
