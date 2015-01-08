@@ -13,6 +13,7 @@
 
 #include "mem/interval_search.h"
 #include "mem/mem.h"
+#include "mem/suffix_link.h"
 #include "types.h"
 
 namespace mem {
@@ -47,6 +48,7 @@ MEM mem_extend_left(const ReferenceString& ref, const std::string& query,
       return MEM(r - i, q - i, mem.length + i);
     }
   }
+  return MEM(-1, 0, 0);
 }
 
 // Collects MEMs for query string position query_pos of length l or greater.
@@ -116,7 +118,8 @@ int find_mems_internal(
       collect_mems(ref, query, l, query_pos, min_match, max_match, mems);
     }
     query_pos += ref.k();
-    // TODO(Fran): Use suffixlink magic to reset match intervals.
+    min_match = find_suffix_link(ref, min_match);
+    max_match = find_suffix_link(ref, max_match);
     if (min_match.matched < 1) {
       min_match = MatchInterval(0, 0, ref.salen());
       max_match = MatchInterval(0, 0, ref.salen());

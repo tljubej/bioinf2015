@@ -13,7 +13,9 @@ namespace suffixarray {
 // Namespace for local methods.
 namespace {
 
-enum SymbolType { L = 1, S = 2 };
+typedef char SymbolType;
+const char S = 2;
+const char L = 1;
 
 // Returns true if symbol at index idx is
 // a LMS symbol according to symbol_types.
