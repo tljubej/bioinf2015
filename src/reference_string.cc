@@ -11,23 +11,22 @@
 #include "sa/sa_is.h"
 #include "sa/sparse_sa.h"
 
-namespace {
-
 // Shared part of the constructors which takes
 // an full SA array of lenght currently stored in
 // n_, and constructs reference string fields of
 // sparse SA, ISA and LCP.
-void construct_reference_data(Index sa[]) {
+void ReferenceString::construct_reference_data(Index sa_ptr[]) {
+  std::unique_ptr<Index[]> sa(sa_ptr);
   if (k_ == 1) {
     sa_.swap(sa);
   } else {
     // Add padding to the string so length (including the terminating
     // character) is a multiple of k (+1), and the final character is the
     // terminating character. Original length is stored for convenience.
-    if (seq->size() % k_ != 0) {
+    if (s_->size() % k_ != 0) {
       Index n_cop = n_;
-      n_ += k_ - seq->size() % k_;
-      seq->append(k - seq->size() % k, '\0');
+      n_ += k_ - s_->size() % k_;
+      s_->append(k_ - s_->size() % k_, '\0');
       sa_.reset(new Index[salen()]);
       suffixarray::sa2ssa(sa.get(), sa_.get() + 1, n_cop, k_);
       sa_[0] = n_ - 1;
@@ -42,9 +41,6 @@ void construct_reference_data(Index sa[]) {
   suffixarray::ssa2lcp(s_->c_str(), sa_.get(), isa_.get(),
       lcp_.get(), n_, k_);
 }
-
-
-}  // namespace
 
 ReferenceString::ReferenceString(std::string* seq, Index k)
   : s_(seq), k_(k) {

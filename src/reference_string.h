@@ -54,6 +54,14 @@ class ReferenceString {
   Index lcp(Index n) const;
 
  private:
+
+  
+  // Shared part of the constructors which takes
+  // an full SA array of lenght currently stored in
+  // n_, and constructs reference string fields of
+  // sparse SA, ISA and LCP.
+  void construct_reference_data(Index sa[]);
+
   std::string* s_;
   std::unique_ptr<Index[]> sa_;
   std::unique_ptr<Index[]> isa_;
