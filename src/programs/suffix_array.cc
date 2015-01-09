@@ -7,8 +7,8 @@
 // the resulting suffix array is written to it in binary format.
 //
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 #include <memory>
 #include <string>

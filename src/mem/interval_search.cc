@@ -81,7 +81,7 @@ MatchInterval find_match_interval(const ReferenceString& ref,
                                   Index match_length) {
   MatchInterval candidate = prev;
 
-  while (query_pos+candidate.matched < query.size()) {
+  while (query_pos+candidate.matched < (Index)query.size()) {
     MatchInterval next = match_next_char(ref, query, query_pos, candidate);
 
     if (next.matched == -1) {

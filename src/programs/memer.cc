@@ -8,8 +8,8 @@
 // all found maximum exact matches accordingly.
 //
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 #include <memory>
 #include <string>
