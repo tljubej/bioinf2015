@@ -11,6 +11,7 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
@@ -42,11 +43,27 @@ int main(int argc, char* argv[]) {
   Index l = atoi(argv[5]);
   ReferenceString ref(refstr.get(), sa.release(), k);
 
-  //TODO(Fran): Add query string input and action. The next part are dummy
-  //skeletons.
-  std::string query;
+  input_util::FastqReader query_reader(argv[3]);
   mem::MEMFinderImpl mem_finder;   
   std::vector<mem::MEM> mems;
-  mem_finder.find_mems(ref, query, l, &mems);
+
+  do {
+    std::unique_ptr<std::string> query(query_reader.next_sequence());
+    if (!query)
+      break;
+
+    mem_finder.find_mems(ref, *query, l, &mems);
+    std::cerr << "\t" << mems.size() << " matches\n";
+
+
+    for (mem::MEM m : mems) {
+      std::cout << 
+          m.length << "\t" <<
+          m.query_string_idx << "\t" <<
+          m.reference_string_idx << "\n";
+    }
+
+  } while (1);
+
   return 0;
 }
