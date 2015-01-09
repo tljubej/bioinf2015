@@ -47,7 +47,7 @@ MatchInterval expand_link(const ReferenceString& ref,
     l--;
   }
 
-  while (r <= n-1 && ref.lcp(r+1) >= q) {
+  while (r < n-1 && ref.lcp(r+1) >= q) {
     e++;
     if (e >= t) {
       return MatchInterval(-1, 0, 0);

@@ -69,7 +69,7 @@ void collect_mems(const ReferenceString& ref, const std::string& query,
 
   while (matched >= min_match.matched) {
     if (right + 1 < ref.salen())
-      matched = std::max(ref.lcp(left), ref.lcp(right));
+      matched = std::max(ref.lcp(left), ref.lcp(right+1));
     else
       matched = ref.lcp(left);
 
