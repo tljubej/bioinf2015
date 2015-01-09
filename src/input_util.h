@@ -32,8 +32,10 @@ class FastqReader {
   // Construct the reader which will read from given filename
   FastqReader(std::string const & filename);
 
+  // Returns the next sequence in the file, or nullptr if EOF
   std::string* next_sequence();
 
+  // Rewinds the reader to read from the beginning of file again
   void rewind();
 
  private:
