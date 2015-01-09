@@ -11,6 +11,7 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include <chrono>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -34,14 +35,27 @@ int main(int argc, char* argv[]) {
     return 1;
   }
   Index n;
+
+  auto start = std::chrono::system_clock::now();
   std::unique_ptr<Index[]> sa(input_util::read_sa(argv[2], &n));
   if (sa.get() == nullptr) {
     fprintf(stderr, "Failed to read sa file.\n");
     return 1;
+  } else {
+    std::cerr << "loaded SA file in " <<
+        std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::system_clock::now() - start)
+        .count() << " ms \n";
   }
+
   Index k = atoi(argv[4]);
   Index l = atoi(argv[5]);
+  start = std::chrono::system_clock::now();
   ReferenceString ref(refstr.get(), sa.release(), k);
+  std::cerr << "Made refstr in " <<
+      std::chrono::duration_cast<std::chrono::milliseconds>(
+          std::chrono::system_clock::now() - start)
+      .count() << " ms \n";
 
   input_util::FastqReader query_reader(argv[3]);
   mem::MEMFinderImpl mem_finder;   
@@ -52,7 +66,12 @@ int main(int argc, char* argv[]) {
     if (!query)
       break;
 
+    start = std::chrono::system_clock::now();
     mem_finder.find_mems(ref, *query, l, &mems);
+    std::cerr << "Found query \n" << *query << " in " <<
+        std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::system_clock::now() - start)
+        .count() << " ms \n";
     std::cerr << "\t" << mems.size() << " matches\n";
 
 
