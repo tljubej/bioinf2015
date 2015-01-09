@@ -61,4 +61,38 @@ Index* read_sa(const char* filename, Index* n) {
   return sa.release();
 }
 
+FastqReader::FastqReader(std::string const &filename) : ifs_(filename) {
+}
+
+std::string* FastqReader::next_sequence() {
+  if (!ifs_.good())
+    return nullptr;
+
+  std::string linebuf;
+
+  std::unique_ptr<std::string> seq(new std::string());
+
+  // the identifier line
+  std::getline(ifs_, linebuf);
+  if (ifs_.eof())
+    return nullptr;
+
+  while (ifs_.peek() != '+' && ifs_.peek() != '@' && !ifs_.eof()) {
+    // line that is part of sequence
+    std::getline(ifs_, linebuf);
+    *seq += linebuf;
+  }
+
+  while (ifs_.peek() != '@' && !ifs_.eof()) {
+    // quality lines
+    std::getline(ifs_, linebuf);
+  }
+
+  return seq.release();
+}
+
+void FastqReader::rewind() {
+  ifs_.seekg(0);
+}
+
 }  // namespace input_util
