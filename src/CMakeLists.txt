@@ -1,6 +1,5 @@
 file(GLOB SuffixArray "sa/*.cc")
 file(GLOB MEM "mem/*.cc")
 include_directories("./")
-add_executable(ssamem "main.cc")
 add_executable(suffix_array "suffix_array.cc" ${SuffixArray} "input_util.cc")
 add_executable(memer "memer.cc" ${SuffixArray} ${MEM} "input_util.cc" "reference_string.cc")
