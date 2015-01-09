@@ -115,7 +115,6 @@ int find_mems_internal(
       continue;
     }
     if (min_match.matched >= l - (ref.k() - 1)) {
-      printf("Collecting\n");
       collect_mems(ref, query, l, query_pos, min_match, max_match, mems);
     }
     query_pos += ref.k();

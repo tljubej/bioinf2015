@@ -72,17 +72,15 @@ int main(int argc, char* argv[]) {
         std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::system_clock::now() - start)
         .count() << " ms \n";
-    std::cerr << "\t" << mems.size() << " matches\n";
-
-
-    for (mem::MEM m : mems) {
-      std::cout << 
-          m.length << "\t" <<
-          m.query_string_idx << "\t" <<
-          m.reference_string_idx << "\n";
-    }
 
   } while (1);
+
+  for (mem::MEM m : mems) {
+    std::cout << 
+        m.length << "\t" <<
+        m.query_string_idx << "\t" <<
+        m.reference_string_idx << "\n";
+  }
 
   return 0;
 }
