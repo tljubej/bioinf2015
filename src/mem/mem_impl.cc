@@ -99,8 +99,8 @@ int find_mems_internal(
     const ReferenceString& ref, const std::string& query,
     Index l, Index query_p0, std::set<MEM, MEMComparator>* mems) {
 
-  MatchInterval min_match(0, 0, ref.salen());
-  MatchInterval max_match(0, 0, ref.salen());
+  MatchInterval min_match(0, 0, ref.salen()-1);
+  MatchInterval max_match(0, 0, ref.salen()-1);
   Index query_pos = query_p0;
 
   while (query_pos < (Index)query.size() - (ref.k() - query_p0)) {
@@ -109,20 +109,21 @@ int find_mems_internal(
     max_match = find_match_interval(ref, query, query_pos, max_match,
         query.size());
     if (min_match.matched <= 1) {
-      min_match = MatchInterval(0, 0, ref.salen());
-      max_match = MatchInterval(0, 0, ref.salen());
+      min_match = MatchInterval(0, 0, ref.salen()-1);
+      max_match = MatchInterval(0, 0, ref.salen()-1);
       query_pos += ref.k();
       continue;
     }
-    if (min_match.matched > l - (ref.k() - 1)) {
+    if (min_match.matched >= l - (ref.k() - 1)) {
+      printf("Collecting\n");
       collect_mems(ref, query, l, query_pos, min_match, max_match, mems);
     }
     query_pos += ref.k();
     min_match = find_suffix_link(ref, min_match);
     max_match = find_suffix_link(ref, max_match);
     if (min_match.matched < 1) {
-      min_match = MatchInterval(0, 0, ref.salen());
-      max_match = MatchInterval(0, 0, ref.salen());
+      min_match = MatchInterval(0, 0, ref.salen()-1);
+      max_match = MatchInterval(0, 0, ref.salen()-1);
     }
   }
   return 0;
