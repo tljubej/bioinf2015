@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     slen = len(s)
     for i in range(n):
-        rnd = random.randint(0, slen-1-l)
+        rnd = random.randint(0, slen-l)
         print('@{}:{}_{}/1'.format(rnd, l, i), file=of)
         print(s[rnd:rnd+l], file=of)
 
