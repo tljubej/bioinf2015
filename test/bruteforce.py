@@ -9,24 +9,76 @@ def find_all(a_str, sub):
         yield start
         start += len(sub) # use start += 1 to find overlapping matches
 
-if __name__ == '__main__':
+def find_mems(s, q, l):
+    mems = []
+    for i in range(len(q)):
+        for j in range(len(s)):
+            go = False
+            if i==0 or j==0:
+                go = True
+            if i!=0 and j!=0:
+                if q[i-1] != s[j-1]:
+                    go = True
+            if go:
+                k = 0
+                while s[j+k] == q[i+k]:
+                    k += 1
+                    if i+k >= len(q) or j+k >= len(s):
+                        break
+
+                if k >= l:
+                    mems.append( (k, i, j) )
+
+    return mems
+
+
+def main():
     fin = open(sys.argv[1], 'r')
     finq = open(sys.argv[2], 'r')
+    errf = open(sys.argv[3], 'w')
+    l = int(sys.argv[4])
 
     fin.readline()
     s = ''
     for i in fin:
         s += i.strip()
 
-    sq = finq.read().strip()
-    lsq = len(sq)
+    qc = 1
+    while True:
+        q = finq.readline().strip()
+        fmems = find_mems(s, q, l)
+        rmems = []
+        while True:
+            line = finq.readline()
+            if line.startswith('\n'):
+                break
+            rmems.append( tuple(int(i) for i in line.split('\t')) )
 
-    # mems = []
-    #
-    # for i in range(len(s)):
-    #     # if i%100000 == 0:
-    #     #     print(i)
-    #     if s[i:i+lsq] == sq:
-    #         mems.append(i)
+        rmems.sort()
+        fmems.sort()
+        if fmems == rmems:
+            print('Query {} ALL OK:'.format(qc))
+        else:
+            print('Query {} WRONG:'.format(qc))
+            # for m, qidx, sidx in rmems:
+            #     print('--')
+            #     print(q[qidx:qidx+m])
+            #     print(s[sidx:sidx+m])
+            print(q, file=errf)
+            print('R:', rmems, file=errf)
+            print('C:', fmems, file=errf)
+            print(file=errf)
 
-    print(list(find_all(s, sq)))
+        print('R:', rmems)
+        print('C:', fmems)
+
+        print()
+
+        qc+=1
+
+
+
+
+
+if __name__ == '__main__':
+    main()
