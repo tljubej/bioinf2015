@@ -7,8 +7,8 @@
 #include "mem/mem_impl.h"
 
 #include <algorithm>
+#include <future>
 #include <string>
-#include <set>
 #include <vector>
 
 #include "mem/interval_search.h"
@@ -53,10 +53,10 @@ MEM mem_extend_left(const ReferenceString& ref, const std::string& query,
 
 // Collects MEMs for query string position query_pos of length l or greater.
 // min_match and max_match are minimal and maximal match intervals in SA,
-// and found MEMs are added to set mems.
+// and found MEMs are added to vector mems.
 void collect_mems(const ReferenceString& ref, const std::string& query,
     Index l, Index query_pos, const MatchInterval& min_match,
-    const MatchInterval& max_match, std::set<MEM, MEMComparator>* mems) {
+    const MatchInterval& max_match, std::vector<MEM>* mems) {
   Index left = max_match.from;
   Index right = max_match.to;
   Index matched = max_match.matched;
@@ -64,7 +64,7 @@ void collect_mems(const ReferenceString& ref, const std::string& query,
     MEM mem = mem_extend_left(ref, query,
         MEM(ref.sa(i), query_pos, matched));
     if (mem.length >= l)
-      mems->insert(mem);
+      mems->push_back(mem);
   }
 
   while (matched >= min_match.matched) {
@@ -79,13 +79,13 @@ void collect_mems(const ReferenceString& ref, const std::string& query,
         MEM mem = mem_extend_left(ref, query,
             MEM(ref.sa(--left), query_pos, matched));
         if (mem.length >= l)
-          mems->insert(mem);
+          mems->push_back(mem);
       }
       while (right + 1 < ref.salen() && ref.lcp(right + 1) >= matched) {
         MEM mem = mem_extend_left(ref, query,
             MEM(ref.sa(++right), query_pos, matched));
         if (mem.length >= l)
-          mems->insert(mem);
+          mems->push_back(mem);
       }
     }
   }
@@ -93,12 +93,11 @@ void collect_mems(const ReferenceString& ref, const std::string& query,
 
 // Internal implementation of MEMFinderImpl::find_mems, taking an
 // additional argument query_p0 which indicates starting offset,
-// allowing for query_p0 = 0..k-1 to be called in parrallel, and
-// instead of filling a vector, fills a set for authors convenienve.
+// allowing for query_p0 = 0..k-1 to be called in parallel, and stores
+// found MEMs in vector mems.
 int find_mems_internal(
     const ReferenceString& ref, const std::string& query,
-    Index l, Index query_p0, std::set<MEM, MEMComparator>* mems) {
-
+    Index l, Index query_p0, std::vector<MEM>* mems) {
   MatchInterval min_match(0, 0, ref.salen()-1);
   MatchInterval max_match(0, 0, ref.salen()-1);
   Index query_pos = query_p0;
@@ -134,15 +133,26 @@ int MEMFinderImpl::find_mems(
     const ReferenceString& ref, const std::string& query,
     Index l, std::vector<MEM>* mems) {
 
-  std::set<MEM, MEMComparator> mems_set;
+  std::vector<std::vector<MEM>> mems_parallel;
+  std::vector<std::future<int>> futures;
+  mems_parallel.resize(ref.k());
+  futures.resize(ref.k());
   for (Index i = 0; i < ref.k(); ++i) {
-    if (find_mems_internal(ref, query, l, i, &mems_set) == -1)
-      return -1;
+    futures[i] = std::async(std::launch::async,
+        find_mems_internal, std::ref(ref), std::ref(query),
+        l, i, &(mems_parallel[i]));
   }
-  for (const MEM& mem : mems_set) {
-    mems->push_back(mem);
+  int ret = 0;
+  for (Index i = 0; i < ref.k(); ++i) {
+    if (futures[i].get() == -1) {
+      ret = -1;
+    } else {
+      for (const MEM& mem : mems_parallel[i]) {
+        mems->push_back(mem);
+      }
+    }
   }
-  return 0;
+  return ret;
 }
 
 }  // namespace mem
