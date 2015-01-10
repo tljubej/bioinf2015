@@ -102,7 +102,7 @@ int find_mems_internal(
   MatchInterval max_match(0, 0, ref.salen()-1);
   Index query_pos = query_p0;
 
-  while (query_pos < (Index)query.size() - (ref.k() - query_p0)) {
+  while (query_pos <= (Index)query.size() - (ref.k() - query_p0)) {
     min_match = find_match_interval(ref, query, query_pos, min_match,
         l - (ref.k() - 1));
     max_match = find_match_interval(ref, query, query_pos, max_match,
