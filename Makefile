@@ -31,10 +31,14 @@ $(BUILD_DIRS):
 	mkdir -p $(BUILD_DIRS)
 
 # global compilation flags, overridable on cmdline
-override CXXFLAGS += -std=c++11 -I$(SRC_DIR) -Wall -O3 -Wextra -pthread
+override CXXFLAGS += -std=c++11 -I$(SRC_DIR) -pthread \
+	-O3 -flto \
+	-Wall -Wextra 
+override LDFLAGS += -pthread \
+	-flto
 
 # it's either c++ linker or -lstdc++
-CC = $(CXX) -pthread
+CC = $(CXX)
 
 # target programs, depends on all object files
 $(BUILD_ROOT)/programs/memer: $(OBJS) $(BUILD_ROOT)/programs/memer.o
