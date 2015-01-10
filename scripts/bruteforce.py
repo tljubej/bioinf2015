@@ -46,11 +46,13 @@ def main():
     qc = 1
     while True:
         q = finq.readline().strip()
+        if not q:
+            break
         fmems = find_mems(s, q, l)
         rmems = []
         while True:
-            line = finq.readline()
-            if line.startswith('\n'):
+            line = finq.readline().strip()
+            if not line:
                 break
             rmems.append( tuple(int(i) for i in line.split('\t')) )
 
