@@ -5,9 +5,9 @@
 
 #include "input_util.h"
 
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstring>
+#include <cstdio>
+#include <cstdlib>
 
 #include <memory>
 #include <string>
@@ -56,9 +56,43 @@ Index* read_sa(const char* filename, Index* n) {
   *n = get_file_size(sa_file) / sizeof(Index);
   std::unique_ptr<Index[]> sa(new Index[*n]);
   size_t read = fread(sa.get(), sizeof(Index), *n, sa_file);
-  if (read != *n)
+  if ((Index)read != *n)
     return nullptr;
   return sa.release();
+}
+
+FastqReader::FastqReader(std::string const &filename) : ifs_(filename) {
+}
+
+std::string* FastqReader::next_sequence() {
+  if (!ifs_.good())
+    return nullptr;
+
+  std::string linebuf;
+
+  std::unique_ptr<std::string> seq(new std::string());
+
+  // the identifier line
+  std::getline(ifs_, linebuf);
+  if (ifs_.eof())
+    return nullptr;
+
+  while (ifs_.peek() != '+' && ifs_.peek() != '@' && !ifs_.eof()) {
+    // line that is part of sequence
+    std::getline(ifs_, linebuf);
+    *seq += linebuf;
+  }
+
+  while (ifs_.peek() != '@' && !ifs_.eof()) {
+    // quality lines
+    std::getline(ifs_, linebuf);
+  }
+
+  return seq.release();
+}
+
+void FastqReader::rewind() {
+  ifs_.seekg(0);
 }
 
 }  // namespace input_util

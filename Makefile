@@ -31,7 +31,11 @@ $(BUILD_DIRS):
 	mkdir -p $(BUILD_DIRS)
 
 # global compilation flags, overridable on cmdline
-override CXXFLAGS += -std=c++11 -I$(SRC_DIR) -Wall -O3 -Wextra
+override CXXFLAGS += -std=c++11 -I$(SRC_DIR) -pthread \
+	-O3 -flto \
+	-Wall -Wextra 
+override LDFLAGS += -pthread \
+	-flto
 
 # it's either c++ linker or -lstdc++
 CC = $(CXX)
@@ -47,3 +51,19 @@ $(OBJS) $(PROGRAM_OBJS): $(BUILD_ROOT)/%.o: $(SRC_DIR)/%.cc
 $(PROGRAM_EXES): $(BUILD_ROOT)/programs/%: $(BUILD_ROOT)/programs/%.o $(OBJS)
 
 -include $(DEPS)
+
+DNA_URL = 'ftp://ftp.ensembl.org/pub/release-78/fasta/caenorhabditis_elegans/dna/Caenorhabditis_elegans.WBcel235.dna.toplevel.fa.gz'
+res/dna.fa.gz:
+	mkdir -p res/
+	wget ftp://ftp.ensembl.org/pub/release-78/fasta/caenorhabditis_elegans/dna/Caenorhabditis_elegans.WBcel235.dna.toplevel.fa.gz -O res/dna.fa.gz
+res/dna.fa: res/dna.fa.gz
+	gzip -d $< -k
+
+prep-big-tests: res/dna.fa
+	## this is huge (4GB+2GB). Abandon this and use pipes?
+	# python3 scripts/subseqs.py res/dna.fa /dev/stdout 200 20000000 | pv >res/test_200x20M
+	# python3 scripts/subseqs.py res/dna.fa /dev/stdout 1000 2000000 | pv >res/tets_1000x2M
+
+run-big-tests:
+	# TODO
+
