@@ -45,23 +45,26 @@ int main(int argc, char* argv[]) {
 
   input_util::FastqReader query_reader(argv[3]);
   mem::MEMFinderImpl mem_finder;   
-  std::vector<mem::MEM> mems;
-
+  
   do {
+    std::vector<mem::MEM> mems;
+
     std::unique_ptr<std::string> query(query_reader.next_sequence());
     if (!query)
       break;
 
     mem_finder.find_mems(ref, *query, l, &mems);
 
-  } while (1);
+    std::cout << *query << "\n";
+    for (mem::MEM m : mems) {
+      std::cout << 
+          m.length << "\t" <<
+          m.query_string_idx << "\t" <<
+          m.reference_string_idx << "\n";
+    }
+    std::cout << "\n";
 
-  for (mem::MEM m : mems) {
-    std::cout << 
-        m.length << "\t" <<
-        m.query_string_idx << "\t" <<
-        m.reference_string_idx << "\n";
-  }
+  } while (1);
 
   return 0;
 }
