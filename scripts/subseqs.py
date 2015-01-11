@@ -8,7 +8,7 @@ if __name__ == '__main__':
     n = int(sys.argv[4])
 
     if (len(sys.argv)>5):
-        seed = int(sys.argv[5])
+        seed = sys.argv[5]
         random.seed(seed)
 
     f.readline()
