@@ -22,13 +22,20 @@ DEPS = $(OBJS:.o=.d) $(PROGRAM_OBJS:.o=.d)
 
 # targets, most trivial first
 
-.PHONY: all clean
-all: $(BUILD_DIRS) $(PROGRAM_EXES)
+.PHONY: all clean clean-all clean-benchmark clean-test
+all: $(PROGRAM_EXES)
 clean:
 	rm -fr $(BUILD_ROOT)
+clean-test:
+	rm -fr test/
+clean-benchmark:
+	rm -fr benchmark/
+clean-all: clean-benchmark clean-test clean
 
 $(BUILD_DIRS):
 	mkdir -p $(BUILD_DIRS)
+
+$(OBJS) $(PROGRAM_OBJS): | $(BUILD_DIRS)
 
 # global compilation flags, overridable on cmdline
 override CXXFLAGS += -std=c++11 -I$(SRC_DIR) -pthread \
@@ -105,4 +112,33 @@ run-tests: all test/test_1000x10.fq test/test_200x500.fq $(TEST_DNA)
 	  fi || echo "Checker crashed.";  \
 	done; \
 	rm $$tmp; \
-	rm $$err; \
+	rm $$err;
+
+benchmark/%.sa: res/% $(BUILD_ROOT)/programs/suffix_array
+	@mkdir -p benchmark/
+	@echo 'Making suffix array for $<'
+	$(TIME) $(BUILD_ROOT)/programs/suffix_array $< $@
+.INTERMEDIATE: prep-benchmark-data
+benchmark/test_2Mx1000.fq benchmark/test_20Mx200.fq: prep-benchmark-data
+prep-benchmark-data: res/dna.fa
+	@mkdir -p benchmark/
+	@echo "Preparing benchmark queries... (will take minutes and GBs)"
+	python3 scripts/subseqs.py \
+	    $< benchmark/test_2Mx1000.fq 2000000 1000 seeeed
+	python3 scripts/subseqs.py \
+	    $< benchmark/test_20Mx200.fq 20000000 200 seeeed
+	@echo "Benchmark data prepared."
+run-benchmark: $(BUILD_ROOT)/programs/memer \
+		$(BUILD_ROOT)/programs/suffix_array \
+		benchmark/dna.fa.sa \
+		benchmark/test_2Mx1000.fq benchmark/test_20Mx200.fq
+	@for k in 1 2 3; do \
+	  echo "Running benchmark with sparse factor K=$$k."; \
+	  for i in benchmark/*.fq; do \
+	    echo "Testing with $$i query file"; \
+	    pv $$i | $(TIME) $(BUILD_ROOT)/programs/memer \
+	        res/dna.fa benchmark/dna.fa.sa /dev/stdin $$k 20 \
+			> $${i##.fq}.out; \
+	    echo "==============="; \
+	  done ;\
+	done;
