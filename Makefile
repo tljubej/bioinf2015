@@ -33,7 +33,7 @@ $(BUILD_DIRS):
 # global compilation flags, overridable on cmdline
 override CXXFLAGS += -std=c++11 -I$(SRC_DIR) -pthread \
 	-O3 -flto \
-	-Wall -Wextra 
+	-Wall -Wextra
 override LDFLAGS += -pthread \
 	-flto
 
@@ -63,7 +63,7 @@ prep-test-data: res/dna.fa
 	@mkdir -p test/
 	@head -n 201 res/dna.fa > $(TEST_DNA)
 	@python3 scripts/subseqs.py $(TEST_DNA) test/test_200x500.fq 200 500
-	@python3 scripts/subseqs.py $(TEST_DNA) test/test_1000x10.fq 1000 10 
+	@python3 scripts/subseqs.py $(TEST_DNA) test/test_1000x10.fq 1000 10
 	@echo "Test data prepared."
 run-tests: all test/test_1000x10.fq test/test_200x500.fq $(TEST_DNA)
 	@# Make sure suffix array file exists and check it is correct.
@@ -103,4 +103,3 @@ run-tests: all test/test_1000x10.fq test/test_200x500.fq $(TEST_DNA)
 	done; \
 	rm $$tmp; \
 	rm $$err; \
-
