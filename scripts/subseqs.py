@@ -6,9 +6,10 @@ if __name__ == '__main__':
     of = open(sys.argv[2], 'w')
     l = int(sys.argv[3])
     n = int(sys.argv[4])
-    seed = int(sys.argv[5])
 
-    random.seed(seed)
+    if (len(sys.argv)>5):
+        seed = int(sys.argv[5])
+        random.seed(seed)
 
     f.readline()
 
