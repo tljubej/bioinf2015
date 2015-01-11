@@ -138,7 +138,7 @@ run-benchmark: $(BUILD_ROOT)/programs/memer \
 	    echo "Testing with $$i query file"; \
 	    pv $$i | $(TIME) $(BUILD_ROOT)/programs/memer \
 	        res/dna.fa benchmark/dna.fa.sa /dev/stdin $$k 20 \
-			> $${i##.fq}.out; \
+			> $${i##.fq}.k$$k.out; \
 	    echo "==============="; \
 	  done ;\
 	done;
