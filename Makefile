@@ -41,32 +41,31 @@ override LDFLAGS += -pthread \
 CC = $(CXX)
 
 # target programs, depends on all object files
-$(BUILD_ROOT)/programs/memer: $(OBJS) $(BUILD_ROOT)/programs/memer.o
-$(BUILD_ROOT)/programs/suffix_array: $(OBJS) $(BUILD_ROOT)/programs/suffix_array.o
+$(PROGRAM_EXES): $(BUILD_ROOT)/programs/%: $(BUILD_ROOT)/programs/%.o $(OBJS)
 
 # compilation rule with substitution into build dir
 $(OBJS) $(PROGRAM_OBJS): $(BUILD_ROOT)/%.o: $(SRC_DIR)/%.cc
 	$(CXX) -c $(CXXFLAGS) $< -o $@ -MMD
-
-$(PROGRAM_EXES): $(BUILD_ROOT)/programs/%: $(BUILD_ROOT)/programs/%.o $(OBJS)
 
 -include $(DEPS)
 
 DNA_URL = 'ftp://ftp.ensembl.org/pub/release-78/fasta/caenorhabditis_elegans/dna/Caenorhabditis_elegans.WBcel235.dna.toplevel.fa.gz'
 res/dna.fa.gz:
 	mkdir -p res/
-	wget ftp://ftp.ensembl.org/pub/release-78/fasta/caenorhabditis_elegans/dna/Caenorhabditis_elegans.WBcel235.dna.toplevel.fa.gz -O res/dna.fa.gz
+	wget '$(DNA_URL)' -O res/dna.fa.gz
 res/dna.fa: res/dna.fa.gz
 	gzip -d $< -k
 
 TEST_DNA = test/dna-short.fa
+.INTERMEDIATE: prep-test-data
+test/test_1000x10.fq test/test_200x500.fq $(TEST_DNA): prep-test-data
 prep-test-data: res/dna.fa
 	@mkdir -p test/
 	@head -n 201 res/dna.fa > $(TEST_DNA)
 	@python3 scripts/subseqs.py $(TEST_DNA) test/test_200x500.fq 200 500
 	@python3 scripts/subseqs.py $(TEST_DNA) test/test_1000x10.fq 1000 10 
 	@echo "Test data prepared."
-run-tests:
+run-tests: all test/test_1000x10.fq test/test_200x500.fq $(TEST_DNA)
 	@# Make sure suffix array file exists and check it is correct.
 	@if [ ! -e $(TEST_DNA).sa ]; then \
 	  echo "Computing suffix array file $(TEST_DNA).sa."; \
@@ -89,10 +88,10 @@ run-tests:
 	err=test/err.out; \
 	L=20; \
 	for query in test/*.fq; do \
-	  echo "\n==========================="; \
+	  echo -e "\n==========================="; \
 	  echo "Testing query file $$query."; \
 	  time $(BUILD_ROOT)/programs/memer $(TEST_DNA) $(TEST_DNA).sa $$query 1 $$L > $$tmp; \
-	  echo "\nChecking correctness."; \
+	  echo -e "\nChecking correctness."; \
 	  : > $$err; \
 	  time python3 scripts/bruteforce.py $(TEST_DNA) $$tmp $$err $$L > /dev/null; \
 	  if [ -s $$err ]; then \
@@ -100,8 +99,8 @@ run-tests:
 	    cat $$err; \
 	  else \
 	    echo "All good."; \
-	  fi \
-	done \
+	  fi; \
+	done; \
 	rm $$tmp; \
 	rm $$err; \
 
