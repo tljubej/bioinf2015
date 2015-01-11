@@ -65,11 +65,12 @@ prep-test-data: res/dna.fa
 	@python3 scripts/subseqs.py $(TEST_DNA) test/test_200x500.fq 200 500 seeeed
 	@python3 scripts/subseqs.py $(TEST_DNA) test/test_1000x10.fq 1000 10 seeeed
 	@echo "Test data prepared."
+TIME = command time -f "real %e\nuser %U\nsys %s\n\nmem %MK\n"
 run-tests: all test/test_1000x10.fq test/test_200x500.fq $(TEST_DNA)
 	@# Make sure suffix array file exists and check it is correct.
 	@if [ ! -e $(TEST_DNA).sa ]; then \
 	  echo "Computing suffix array file $(TEST_DNA).sa."; \
-	  time $(BUILD_ROOT)/programs/suffix_array $(TEST_DNA) $(TEST_DNA).sa; \
+	  $(TIME) $(BUILD_ROOT)/programs/suffix_array $(TEST_DNA) $(TEST_DNA).sa; \
 	else \
 	  echo "Suffix array file found."; \
 	fi
@@ -88,18 +89,20 @@ run-tests: all test/test_1000x10.fq test/test_200x500.fq $(TEST_DNA)
 	err=test/err.out; \
 	L=20; \
 	for query in test/*.fq; do \
-	  echo -e "\n==========================="; \
+	  echo "==========================="; \
 	  echo "Testing query file $$query."; \
-	  time $(BUILD_ROOT)/programs/memer $(TEST_DNA) $(TEST_DNA).sa $$query 1 $$L > $$tmp; \
-	  echo -e "\nChecking correctness."; \
+	  $(TIME) $(BUILD_ROOT)/programs/memer \
+	      $(TEST_DNA) $(TEST_DNA).sa $$query 1 $$L > $$tmp; \
+	  echo "Checking correctness."; \
 	  : > $$err; \
-	  time python3 scripts/bruteforce.py $(TEST_DNA) $$tmp $$err $$L > /dev/null; \
+	  $(TIME) python3 scripts/bruteforce.py \
+	      $(TEST_DNA) $$tmp $$err $$L > /dev/null && \
 	  if [ -s $$err ]; then \
 	    echo "Errors found."; \
 	    cat $$err; \
 	  else \
 	    echo "All good."; \
-	  fi; \
+	  fi || echo "Checker crashed.";  \
 	done; \
 	rm $$tmp; \
 	rm $$err; \
