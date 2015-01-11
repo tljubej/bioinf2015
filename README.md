@@ -12,8 +12,12 @@ The source code adheres to [Google C++ Style Guide](http://google-styleguide.goo
 
 To build:
 
-    cmake CMakeLists.txt
     make
 
-The binary file should be in bin/.
+The binary files should be in `build/programs`.
+
+To test against a brute-force implementation:
+
+    make run-tests
+
 A C++11 compliant compiler is required.
