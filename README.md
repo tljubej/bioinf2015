@@ -14,9 +14,9 @@ To build:
 
     make
 
-The binary files should be in `build/programs`.
+The binary files should be in `build/programs`. A C++11 compliant compiler is required.
 
-To test against a brute-force implementation:
+To test against a `python3` brute-force implementation:
 
     make run-tests
     
@@ -24,6 +24,15 @@ To run benchmarks on large datasets with various values of 'K'
 
     make run-benchmark
     
-The tool GNU Time is required to run the benchmarks.
+The tools `pv` and GNU Time are required to run the benchmarks.
 
-A C++11 compliant compiler is required.
+If running the tests or benchmarks produces strange errors:
+
+    terminate called after throwing an instance of 'std::system_error'
+      what():  Enable multithreading to use std::thread: Operation not permitted
+
+then you have most likely encountered a GCC [bug](https://bugs.launchpad.net/ubuntu/+source/gcc-defaults/+bug/1228201), which is worked around by rebuilding with
+
+    make LDFLAGS=-Wl,--no-as-needed`
+
+This bug is present on bio-linux 8. 
