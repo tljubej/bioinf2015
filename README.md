@@ -19,5 +19,11 @@ The binary files should be in `build/programs`.
 To test against a brute-force implementation:
 
     make run-tests
+    
+To run benchmarks on large datasets with various values of 'K'
+
+    make run-benchmark
+    
+The tool GNU Time is required to run the benchmarks.
 
 A C++11 compliant compiler is required.
