@@ -33,6 +33,6 @@ If running the tests or benchmarks produces strange errors:
 
 then you have most likely encountered a GCC [bug](https://bugs.launchpad.net/ubuntu/+source/gcc-defaults/+bug/1228201), which is worked around by rebuilding with
 
-    make LDFLAGS=-Wl,--no-as-needed`
+    make LDFLAGS=-Wl,--no-as-needed
 
 This bug is present on bio-linux 8. 
