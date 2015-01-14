@@ -16,6 +16,10 @@ To build:
 
 The binary files should be in `build/programs`. A C++11 compliant compiler is required.
 
+To generate test data:
+
+    make prep-test-data
+
 To test against a `python3` brute-force implementation:
 
     make run-tests
