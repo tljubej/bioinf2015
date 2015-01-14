@@ -18,7 +18,7 @@ namespace input_util {
 
 namespace {
 
-size_t kBufferSize = 512;
+const size_t kBufferSize = 512;
 
 // Returns size of the file in bytes.
 size_t get_file_size(FILE* file) {
